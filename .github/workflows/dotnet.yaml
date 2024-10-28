@@ -50,7 +50,6 @@ jobs:
         cd $workdir
         dotnet build
       name: dotnet build
-      working-directory: ${{ workdir }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
