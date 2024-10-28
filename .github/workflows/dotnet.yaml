@@ -67,6 +67,6 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        file: $workdir/Dockerfile
+        file: ${{ env.workdir }}/Dockerfile
         push: true
         tags: jorikvl/dotnet-devops-example:latest
