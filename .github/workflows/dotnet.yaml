@@ -31,19 +31,24 @@ jobs:
     - uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '2.2.x'
-    - run: dotnet restore
+    - run: |
+        cd $workdir
+        dotnet restore
       name: dotnet restore
-      working-directory: ${{workdir}}
 
-    - run: dotnet test
+    - run: |
+        cd $workdir
+        dotnet test
       name: dotent test
-      working-directory: ${workdir}
 
-    - run: dotnet publish
+    - run: |
+        cd $workdir
+        dotnet publish
       name: dotent publish
-      working-directory: ${{ env.workdir }}
 
-    - run: dotnet build
+    - run: |
+        cd $workdir
+        dotnet build
       name: dotnet build
       working-directory: ${{ workdir }}
 
@@ -63,6 +68,6 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        file: docker/Dockerfile
+        file: $workdir/Dockerfile
         push: true
         tags: jorikvl/dotnet-devops-example:latest
