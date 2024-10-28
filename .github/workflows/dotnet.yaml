@@ -33,19 +33,19 @@ jobs:
         dotnet-version: '2.2.x'
     - run: dotnet restore
       name: dotnet restore
-      working-directory: $workdir
+      working-directory: ${{workdir}}
 
     - run: dotnet test
       name: dotent test
-      working-directory: $workdir
+      working-directory: ${workdir}
 
     - run: dotnet publish
       name: dotent publish
-      working-directory: $workdir
+      working-directory: ${{ env.workdir }}
 
     - run: dotnet build
       name: dotnet build
-      working-directory: $workdir
+      working-directory: ${{ workdir }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
