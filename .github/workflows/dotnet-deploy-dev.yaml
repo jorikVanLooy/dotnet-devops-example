@@ -12,6 +12,8 @@ on:
   workflow_run:
     workflows:
       - "Build and push dev"
+    types:
+      - completed
 
 
 jobs:
