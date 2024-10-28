@@ -60,6 +60,12 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
+    - name: run ls
+      run: ls -lah aspnet-core-dotnet-core
+
+    - name: run ls
+      run: ls -lah aspnet-core-dotnet-core/bin
+
     - name: Build and push
       uses: docker/build-push-action@v6
       with:
