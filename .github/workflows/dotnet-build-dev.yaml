@@ -9,7 +9,7 @@
 name: Build and push dev
 
 on:
-  push:
+  pull_request:
     branches:
       - "main"
 
@@ -20,13 +20,10 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    outputs:
-      docker-tag: ${{ steps.set-version.outputs.docker-tag }}
     env:
       workdir: "aspnet-core-dotnet-core"
 
     steps:
-    - uses: actions/checkout@v4
     - uses: actions/checkout@v4
     - uses: actions/setup-dotnet@v4
       with:
@@ -69,4 +66,5 @@ jobs:
         context: .
         file: ${{ env.workdir }}/Dockerfile
         push: true
-        tags: jorikvl/dotnet-devops-example:latest
+        tags: jorikvl/dotnet-devops-example:dev
+  
