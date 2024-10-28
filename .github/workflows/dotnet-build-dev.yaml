@@ -29,24 +29,24 @@ jobs:
       with:
         dotnet-version: '2.2.x'
     - run: |
-        cd $workdir
         dotnet restore
       name: dotnet restore
+      working-directory: ${{ env.workdir }}
 
     - run: |
-        cd $workdir
         dotnet test
       name: dotent test
+      working-directory: ${{ env.workdir }}
 
     - run: |
-        cd $workdir
         dotnet publish
       name: dotent publish
+      working-directory: ${{ env.workdir }}
 
     - run: |
-        cd $workdir
         dotnet build
       name: dotnet build
+      working-directory: ${{ env.workdir }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
@@ -91,4 +91,4 @@ jobs:
             az extension add --name containerapp --upgrade
             az containerapp update \
               -n dev-app-dotnet -g rg-dev \
-            --image "docker.io/jorikvl/cloud-devops-example:dev"
+            --image "docker.io/jorikvl/dotnet-devops-example:dev"
