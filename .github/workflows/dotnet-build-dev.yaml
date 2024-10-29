@@ -30,22 +30,17 @@ jobs:
         dotnet-version: '2.2.x'
     - run: |
         dotnet restore
-      name: dotnet restore
+      name: download and restore dependencies
       working-directory: ${{ env.workdir }}
 
     - run: |
         dotnet test
-      name: dotent test
+      name: test the application
       working-directory: ${{ env.workdir }}
 
     - run: |
         dotnet publish
-      name: dotent publish
-      working-directory: ${{ env.workdir }}
-
-    - run: |
-        dotnet build
-      name: dotnet build
+      name: build and publish the application
       working-directory: ${{ env.workdir }}
 
     - name: Set up QEMU
@@ -59,12 +54,6 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: run ls
-      run: ls -lah aspnet-core-dotnet-core
-
-    - name: run ls
-      run: ls -lah aspnet-core-dotnet-core/bin
 
     - name: Build and push
       uses: docker/build-push-action@v6
