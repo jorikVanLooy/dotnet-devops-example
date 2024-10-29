@@ -34,24 +34,19 @@ jobs:
       with:
         dotnet-version: '2.2.x'
     - run: |
-        cd $workdir
         dotnet restore
-      name: dotnet restore
+      name: download and restore dependencies
+      working-directory: ${{ env.workdir }}
 
     - run: |
-        cd $workdir
         dotnet test
-      name: dotent test
+      name: test the application
+      working-directory: ${{ env.workdir }}
 
     - run: |
-        cd $workdir
         dotnet publish
-      name: dotent publish
-
-    - run: |
-        cd $workdir
-        dotnet build
-      name: dotnet build
+      name: build and publish the application
+      working-directory: ${{ env.workdir }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
@@ -73,3 +68,27 @@ jobs:
         push: true
         tags: jorikvl/dotnet-devops-example:dev
   
+  deploy:
+    needs: build
+    permissions:
+      id-token: write
+    runs-on:
+      ubuntu-latest
+    environment: "dev"
+    steps:
+      - name: login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and deploy Container App
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az extension add --name containerapp --upgrade
+            az containerapp update \
+              -n dev-app-dotnet -g rg-dev \
+            --image "docker.io/jorikvl/dotnet-devops-example:dev"
