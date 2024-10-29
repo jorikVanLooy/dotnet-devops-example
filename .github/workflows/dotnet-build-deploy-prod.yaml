@@ -11,17 +11,14 @@ name: Build and push dev
 on:
   workflow_dispatch:
     
-  pull_request:
-    branches:
-      - "main"
   push:
     branches:
-      - "main"
+      - "release/*"
 
 jobs:
   build:
     environment:
-      "dev"
+      "prod"
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -66,7 +63,7 @@ jobs:
         context: .
         file: ${{ env.workdir }}/Dockerfile
         push: true
-        tags: jorikvl/dotnet-devops-example:dev
+        tags: jorikvl/dotnet-devops-example:prod
   
   deploy:
     needs: build
@@ -74,7 +71,7 @@ jobs:
       id-token: write
     runs-on:
       ubuntu-latest
-    environment: "dev"
+    environment: "prod"
     steps:
       - name: login to Azure
         uses: azure/login@v1
@@ -83,12 +80,12 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Build and deploy Container App
+      - name: deploy to Container App
         uses: azure/cli@v2
         with:
           azcliversion: latest
           inlineScript: |
             az extension add --name containerapp --upgrade
             az containerapp update \
-              -n dev-app-dotnet -g rg-dev \
-            --image "docker.io/jorikvl/dotnet-devops-example:dev"
+              -n prod-app-dotnet -g rg-prod \
+            --image "docker.io/jorikvl/dotnet-devops-example:prod"
